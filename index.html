@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Training Room</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#home" data-route="home" aria-label="The Training Room home">
+        <span class="brand-mark">TR</span>
+        <span>The Training Room</span>
+      </a>
+      <button class="menu-button" type="button" aria-label="Toggle navigation">Menu</button>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#home" data-route="home">Home</a>
+        <a href="#how" data-route="how">How It Works</a>
+        <a href="#pricing" data-route="pricing">Pricing</a>
+        <a href="#faq" data-route="faq">FAQ</a>
+        <a href="#demo" data-route="demo">Demo</a>
+        <a class="nav-cta" href="#login" data-route="login">Login</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page public-page active" data-page="home" id="home">
+        <div class="brand-intro" aria-label="The Training Room opening statement">
+          <h1>The Training Room.</h1>
+          <a class="scroll-cue" href="#home-hero" aria-label="Scroll to homepage hero"><span></span></a>
+        </div>
+        <div class="hero" id="home-hero">
+          <div class="hero-minimal">
+            <h1>Less Explaining.<br />More Doing.</h1>
+            <p>Create modules, assign training and track progress in one place.</p>
+            <div class="actions">
+              <a class="button primary" href="#demo" data-route="demo">View Demo</a>
+              <a class="button secondary" href="#login" data-route="login">Login</a>
+            </div>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <span>01</span>
+            <h2>Create modules</h2>
+            <p>Turn everyday processes into simple visual training.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h2>Assign training</h2>
+            <p>Give the right training to the right staff.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h2>Track progress</h2>
+            <p>See who is complete and who needs support.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" data-page="how" id="how">
+        <div class="page-heading how-heading">
+          <h1>How it works</h1>
+          <p>A simple training flow for small businesses.</p>
+        </div>
+        <div class="step-grid">
+          <article>
+            <span>1</span>
+            <h2>Create training</h2>
+            <p>Managers upload a short training video, add written steps and create quiz questions.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h2>Staff complete it</h2>
+            <p>Staff watch the full training video, answer the quiz and receive a completion result.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h2>Track</h2>
+            <p>Managers see who has completed training, quiz scores and who still needs to finish.</p>
+          </article>
+        </div>
+        <p class="how-summary">The Training Room helps small businesses turn everyday workplace knowledge into clear digital training. Instead of relying on verbal instructions or scattered notes, managers can create simple modules that staff can complete and be tracked on.</p>
+        <div class="how-cta">
+          <a class="button primary" href="#demo" data-route="demo">Explore the demo</a>
+        </div>
+      </section>
+
+      <section class="page pricing-page" data-page="pricing" id="pricing">
+        <section class="pricing-section" aria-labelledby="pricing-title">
+          <div class="pricing-heading">
+            <h1 id="pricing-title">Simple pricing for small businesses</h1>
+            <p>Affordable training tools for small teams without complicated enterprise pricing.</p>
+          </div>
+          <div class="pricing-grid">
+            <article class="pricing-card">
+              <div class="pricing-card-header">
+                <h2>Starter</h2>
+                <p>For very small teams starting out.</p>
+              </div>
+              <div class="pricing-price">
+                <strong>$9</strong>
+                <span>per month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><span>&check;</span>Up to 5 staff</li>
+                <li><span>&check;</span>3 training modules</li>
+                <li><span>&check;</span>Video and written steps</li>
+                <li><span>&check;</span>Basic quiz tracking</li>
+                <li><span>&check;</span>Staff completion view</li>
+              </ul>
+              <a class="button secondary" href="#login" data-route="login">Choose Starter</a>
+            </article>
+            <article class="pricing-card featured-pricing-card">
+              <span class="pricing-badge">Most popular</span>
+              <div class="pricing-card-header">
+                <h2>Small Team</h2>
+                <p>For small businesses training casual or part time staff.</p>
+              </div>
+              <div class="pricing-price">
+                <strong>$19</strong>
+                <span>per month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><span>&check;</span>Up to 15 staff</li>
+                <li><span>&check;</span>10 training modules</li>
+                <li><span>&check;</span>Quiz scores</li>
+                <li><span>&check;</span>Manager dashboard</li>
+                <li><span>&check;</span>Training library</li>
+              </ul>
+              <a class="button primary" href="#login" data-route="login">Choose Small Team</a>
+            </article>
+            <article class="pricing-card">
+              <div class="pricing-card-header">
+                <h2>Growing Team</h2>
+                <p>For busier small businesses with more staff movement.</p>
+              </div>
+              <div class="pricing-price">
+                <strong>$29</strong>
+                <span>per month</span>
+              </div>
+              <ul class="pricing-features">
+                <li><span>&check;</span>Up to 30 staff</li>
+                <li><span>&check;</span>Unlimited training modules</li>
+                <li><span>&check;</span>Progress tracking</li>
+                <li><span>&check;</span>Role based training</li>
+                <li><span>&check;</span>Priority support</li>
+              </ul>
+              <a class="button secondary" href="#login" data-route="login">Choose Growing Team</a>
+            </article>
+          </div>
+          <p class="pricing-note">14 day free trial available. No long term contract required.</p>
+        </section>
+      </section>
+
+      <section class="page faq-page" data-page="faq" id="faq">
+        <div class="faq-heading">
+          <h1>Frequently asked questions</h1>
+          <p>Simple answers for small business owners creating staff training for the first time.</p>
+        </div>
+        <div class="faq-grid">
+          <details class="faq-card" open>
+            <summary>Do I need professional videos?</summary>
+            <p>No. The Training Room is designed for simple phone videos. A manager can film a short workplace task, upload it and add written steps.</p>
+          </details>
+          <details class="faq-card">
+            <summary>How long should a training video be?</summary>
+            <p>Most training videos should be short and focused. Around 1 to 3 minutes is enough for a simple task, such as making a product, opening the store or completing a cleaning process.</p>
+          </details>
+          <details class="faq-card">
+            <summary>Who creates the quiz questions?</summary>
+            <p>Managers can write quiz questions based on the training video and written steps. The quiz helps check that staff understand the task before they mark it complete.</p>
+          </details>
+          <details class="faq-card">
+            <summary>What should the quiz test?</summary>
+            <p>The quiz should test the most important parts of the task, such as safety steps, correct order, ingredients, customer service expectations or common mistakes.</p>
+          </details>
+          <details class="faq-card">
+            <summary>Can staff rewatch the training?</summary>
+            <p>Yes. Staff can return to the training module whenever they need a refresher.</p>
+          </details>
+          <details class="faq-card">
+            <summary>Can managers track who has completed training?</summary>
+            <p>Yes. The manager dashboard shows who has completed the module, quiz scores and who still needs to finish.</p>
+          </details>
+          <details class="faq-card">
+            <summary>Is this made for small businesses?</summary>
+            <p>Yes. The Training Room is designed for small teams that need simple training without complicated enterprise software.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="page demo-page" data-page="demo" id="demo">
+        <div class="page-heading demo-heading">
+          <div>
+            <p class="eyebrow">Demo</p>
+            <h1>Explore the demo</h1>
+            <p>Explore how a manager creates training and how staff complete it.</p>
+            <a class="button primary demo-flow-button" href="#manager" data-route="manager">View Full Demo Flow</a>
+          </div>
+        </div>
+        <div class="role-grid two-role-grid">
+          <article class="role-card">
+            <span class="role-icon">M</span>
+            <h2>Manager Demo</h2>
+            <p>Create modules, assign training and track staff completion.</p>
+            <a class="button primary" href="#manager" data-route="manager">View Manager Demo</a>
+          </article>
+          <article class="role-card">
+            <span class="role-icon">S</span>
+            <h2>Staff Demo</h2>
+            <p>Complete assigned training, watch modules and take quizzes.</p>
+            <a class="button primary" href="#staff" data-route="staff">View Staff Demo</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="page login-page" data-page="login" id="login">
+        <div class="login-shell">
+          <div class="login-layout">
+            <div class="page-heading">
+              <h1>Login</h1>
+              <p>Sign in to access your training hub.</p>
+            </div>
+            <form class="form-card login-card" id="loginForm">
+              <label>Email or username <input id="loginEmail" type="email" value="demo@trainingroom.com" autocomplete="username" required /></label>
+              <label>Password <input id="loginPassword" type="password" value="trainingroom123" autocomplete="current-password" required /></label>
+              <button class="button primary" type="submit">Sign In</button>
+              <p class="form-message" id="loginMessage" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="prototype-panel">
+            <div class="prototype-heading">
+              <h2>Prototype Login</h2>
+              <p>Choose demo role</p>
+            </div>
+            <div class="role-grid compact-role-grid">
+              <article class="role-card">
+                <span class="role-icon">M</span>
+                <h2>Manager</h2>
+                <p>For creating modules and tracking progress.</p>
+                <a class="button primary" href="#manager" data-route="manager">Enter as Manager</a>
+              </article>
+              <article class="role-card">
+                <span class="role-icon">S</span>
+                <h2>Staff</h2>
+                <p>For completing training.</p>
+                <a class="button primary" href="#staff" data-route="staff">Enter as Staff</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page" data-page="staff" id="staff">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Staff Portal</p>
+            <a class="active" href="#staff" data-route="staff">Dashboard</a>
+            <a href="#staff" data-route="staff">My Training</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading split">
+              <div>
+                <p class="eyebrow">Staff Dashboard</p>
+                <h1>My Training</h1>
+              </div>
+              <a class="button secondary" href="#login" data-route="login">Back to roles</a>
+            </div>
+            <div class="stat-grid compact-stats">
+              <article><strong>1</strong><span>assigned</span></article>
+              <article><strong id="staffCompleteCount">0</strong><span>complete</span></article>
+              <article><strong id="staffProgressCount">1</strong><span>in progress</span></article>
+            </div>
+            <div class="module-grid">
+              <article class="module-card">
+                <span class="status-label status-progress" id="staffModuleStatus">In progress</span>
+                <h2>How to Make a Tropical Sunset Smoothie</h2>
+                <a class="button primary" id="staffModuleAction" href="#staff-module" data-route="staff-module">Continue</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page module-page" data-page="staff-module" id="staff-module">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Staff Portal</p>
+            <a href="#staff" data-route="staff">Dashboard</a>
+            <a href="#staff" data-route="staff">My Training</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading split">
+              <div>
+                <p class="eyebrow">Training Module</p>
+                <h1>How to Make a Tropical Sunset Smoothie</h1>
+                <div class="module-meta">
+                  <span>Food preparation</span>
+                  <span>5 minutes</span>
+                </div>
+                <p>Learn the steps for preparing a Tropical Sunset Smoothie safely and consistently.</p>
+              </div>
+              <a class="button secondary module-back" href="#staff" data-route="staff">Back</a>
+            </div>
+            <div class="module-layout">
+              <div class="training-column">
+                <div class="video-placeholder module-video-preview video-player-card" id="moduleVideoPreview">
+                  <h2>Training video</h2>
+                  <video class="uploaded-video" controls playsinline preload="metadata">
+                    <source src="videos/tropical-sunset-smoothie.mp4" type="video/mp4" />
+                    <source src="videos/tropical-sunset-smoothie.mov" />
+                    <source src="videos/tropical-sunset-smoothie.MOV" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+              <div class="lesson-card module-steps-card">
+                <h2>Training steps</h2>
+                <ol class="step-list">
+                  <li>Wash your hands and prepare a clean blender jug.</li>
+                  <li>Add the smoothie ingredients in the correct order.</li>
+                  <li>Blend until the smoothie is even and smooth.</li>
+                  <li>Pour, garnish and serve the smoothie straight away.</li>
+                </ol>
+                <div class="module-next-step">
+                  <p>Watch the training video and review the steps before starting the knowledge check.</p>
+                  <a class="button primary start-quiz-button" href="#quiz" data-route="quiz">Start Knowledge Check</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page quiz-page" data-page="quiz" id="quiz">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Staff Portal</p>
+            <a href="#staff" data-route="staff">Dashboard</a>
+            <a href="#staff" data-route="staff">My Training</a>
+            <a class="active" href="#quiz" data-route="quiz">Knowledge Check</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="quiz-shell">
+              <div class="page-heading split">
+                <div>
+                  <p class="eyebrow">Quiz</p>
+                  <h1>Knowledge Check</h1>
+                  <p>How to Make a Tropical Sunset Smoothie</p>
+                </div>
+                <a class="button secondary module-back" href="#staff-module" data-route="staff-module">Back to module</a>
+              </div>
+              <form class="quiz-card" id="quizForm">
+                <div class="question">
+                  <h2>1. What liquid base do you use for the Tropical Sunset Smoothie?</h2>
+                  <div class="answer-grid">
+                    <label class="answer-option"><input type="radio" name="q1" value="A" required /><span>A.</span><strong>Coconut water</strong></label>
+                    <label class="answer-option"><input type="radio" name="q1" value="B" /><span>B.</span><strong>Almond milk</strong></label>
+                    <label class="answer-option"><input type="radio" name="q1" value="C" /><span>C.</span><strong>Apple juice</strong></label>
+                    <label class="answer-option"><input type="radio" name="q1" value="D" /><span>D.</span><strong>Tap water</strong></label>
+                  </div>
+                </div>
+                <div class="question">
+                  <h2>2. How much liquid do you add to the smoothie?</h2>
+                  <div class="answer-grid">
+                    <label class="answer-option"><input type="radio" name="q2" value="A" required /><span>A.</span><strong>150 ml</strong></label>
+                    <label class="answer-option"><input type="radio" name="q2" value="B" /><span>B.</span><strong>250 ml</strong></label>
+                    <label class="answer-option"><input type="radio" name="q2" value="C" /><span>C.</span><strong>330 ml</strong></label>
+                    <label class="answer-option"><input type="radio" name="q2" value="D" /><span>D.</span><strong>500 ml</strong></label>
+                  </div>
+                </div>
+                <div class="question">
+                  <h2>3. What powder do you add into the smoothie?</h2>
+                  <div class="answer-grid">
+                    <label class="answer-option"><input type="radio" name="q3" value="A" required /><span>A.</span><strong>Protein powder</strong></label>
+                    <label class="answer-option"><input type="radio" name="q3" value="B" /><span>B.</span><strong>Collagen</strong></label>
+                    <label class="answer-option"><input type="radio" name="q3" value="C" /><span>C.</span><strong>Cacao powder</strong></label>
+                    <label class="answer-option"><input type="radio" name="q3" value="D" /><span>D.</span><strong>Matcha powder</strong></label>
+                  </div>
+                </div>
+                <div class="question">
+                  <h2>4. What number do you press on the blender?</h2>
+                  <div class="answer-grid">
+                    <label class="answer-option"><input type="radio" name="q4" value="A" required /><span>A.</span><strong>1</strong></label>
+                    <label class="answer-option"><input type="radio" name="q4" value="B" /><span>B.</span><strong>2</strong></label>
+                    <label class="answer-option"><input type="radio" name="q4" value="C" /><span>C.</span><strong>3</strong></label>
+                    <label class="answer-option"><input type="radio" name="q4" value="D" /><span>D.</span><strong>Pulse</strong></label>
+                  </div>
+                </div>
+                <button class="button primary" type="submit">Submit Quiz</button>
+                <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+                <button class="button secondary quiz-try-again" id="tryAgainButton" type="button" hidden>Try Again</button>
+                <a class="button secondary quiz-return" href="#staff" data-route="staff" hidden>Return to Dashboard</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page" data-page="manager" id="manager">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Manager Portal</p>
+            <a class="active" href="#manager" data-route="manager">Dashboard</a>
+            <a href="#manager-create" data-route="manager-create">Create Module</a>
+            <a href="#assign" data-route="assign">Assign Training</a>
+            <a href="#library" data-route="library">Library</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading split">
+              <div>
+                <p class="eyebrow">Manager Dashboard</p>
+                <h1>Manager Dashboard</h1>
+              </div>
+              <a class="button secondary" href="#login" data-route="login">Back to roles</a>
+            </div>
+            <div class="action-grid">
+              <a href="#manager-create" data-route="manager-create"><span>+</span><strong>Create Module</strong><small>Build a new training module.</small></a>
+              <a href="#assign" data-route="assign"><span>-&gt;</span><strong>Assign Training</strong><small>Send training to staff by role.</small></a>
+              <a href="#library" data-route="library"><span>L</span><strong>Training Library</strong><small>View the saved module.</small></a>
+            </div>
+            <section class="manager-progress-card">
+              <div class="section-heading">
+                <h2>Staff Progress</h2>
+                <p>Track the assigned Tropical Sunset Smoothie module.</p>
+              </div>
+              <div class="manager-progress-overview">
+                <div class="completion-ring" id="managerCompletionChart" style="--completion: 60%" aria-label="60 per cent complete">
+                  <strong id="managerCompletionPercent">60</strong>
+                  <span>per cent complete</span>
+                </div>
+                <div class="manager-summary-grid">
+                  <article>
+                    <strong>5</strong>
+                    <span>staff assigned</span>
+                  </article>
+                  <article>
+                    <strong id="managerSummaryCompleted">3</strong>
+                    <span>completed</span>
+                  </article>
+                  <article>
+                    <strong id="managerSummaryInProgress">1</strong>
+                    <span>in progress</span>
+                  </article>
+                  <article>
+                    <strong>1</strong>
+                    <span>not started</span>
+                  </article>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="manager-progress-table">
+                  <thead>
+                    <tr>
+                      <th>Staff name</th>
+                      <th>Module</th>
+                      <th>Status</th>
+                      <th>Quiz score</th>
+                      <th>Date completed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Mia</td>
+                      <td>How to Make a Tropical Sunset Smoothie</td>
+                      <td id="managerProgressStatus">In progress</td>
+                      <td id="managerQuizScore">Not submitted</td>
+                      <td id="managerDateCompleted">Not completed</td>
+                    </tr>
+                    <tr>
+                      <td>Sophie</td>
+                      <td>How to Make a Tropical Sunset Smoothie</td>
+                      <td>Complete</td>
+                      <td>100 per cent</td>
+                      <td>Today</td>
+                    </tr>
+                    <tr>
+                      <td>Ava</td>
+                      <td>How to Make a Tropical Sunset Smoothie</td>
+                      <td>Complete</td>
+                      <td>100 per cent</td>
+                      <td>Yesterday</td>
+                    </tr>
+                    <tr>
+                      <td>Lily</td>
+                      <td>How to Make a Tropical Sunset Smoothie</td>
+                      <td>Complete</td>
+                      <td>100 per cent</td>
+                      <td>Yesterday</td>
+                    </tr>
+                    <tr>
+                      <td>Noah</td>
+                      <td>How to Make a Tropical Sunset Smoothie</td>
+                      <td>Not started</td>
+                      <td>Not submitted</td>
+                      <td>Not completed</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page" data-page="manager-create" id="manager-create">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Manager Portal</p>
+            <a href="#manager" data-route="manager">Dashboard</a>
+            <a class="active" href="#manager-create" data-route="manager-create">Create Module</a>
+            <a href="#assign" data-route="assign">Assign Training</a>
+            <a href="#library" data-route="library">Library</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading">
+              <p class="eyebrow">Create Module</p>
+              <h1>Create Module</h1>
+            </div>
+            <form class="form-card module-form" id="moduleForm">
+              <label>Module title <input id="moduleTitle" type="text" value="How to Make a Tropical Sunset Smoothie" required /></label>
+              <label>Short description <textarea id="moduleDescription" rows="3" required>Learn the steps for preparing a Tropical Sunset Smoothie safely and consistently.</textarea></label>
+              <div class="form-row">
+                <label>Category <input id="moduleCategory" type="text" value="Food preparation" required /></label>
+                <label>Estimated time <input id="moduleTime" type="text" value="5 minutes" required /></label>
+              </div>
+              <section class="upload-section" aria-label="Upload training video">
+                <div class="upload-header">
+                  <h2>Training video</h2>
+                  <p>Upload a video or paste a direct video link.</p>
+                </div>
+                <label>Video link <input id="trainingVideoLink" type="url" placeholder="https://example.com/training-video.mp4" /></label>
+                <input class="file-input" id="trainingVideoUpload" type="file" accept="video/mp4,video/quicktime,video/webm" />
+                <label class="button primary upload-button" for="trainingVideoUpload">Choose video file</label>
+                <p class="upload-note">Accepted formats: MP4, MOV or WebM. A video link is best for a refresh-safe public demo.</p>
+                <p class="video-file-name" id="videoFileName" aria-live="polite">No video selected.</p>
+                <div class="video-upload-preview" id="videoUploadPreview">
+                  <span class="play-button" aria-hidden="true"></span>
+                  <div>
+                    <h3>Video preview</h3>
+                    <p>Selected video will appear here before publishing.</p>
+                  </div>
+                </div>
+              </section>
+              <label>Written steps <textarea id="moduleSteps" rows="5" required>Wash your hands and prepare a clean blender jug.
+Add the smoothie ingredients in the correct order.
+Blend until the smoothie is even and smooth.
+Pour, garnish and serve the smoothie straight away.</textarea></label>
+              <section class="quiz-builder" aria-labelledby="quiz-builder-title">
+                <div class="section-heading">
+                  <h2 id="quiz-builder-title">Quiz questions</h2>
+                  <p>Add four answer options and choose the correct answer.</p>
+                </div>
+                <div class="quiz-builder-list" id="quizBuilder">
+                  <article class="quiz-builder-item">
+                    <label>Question <input name="quizQuestion" type="text" value="What liquid base do you use for the Tropical Sunset Smoothie?" required /></label>
+                    <div class="form-row">
+                      <label>A <input name="optionA" type="text" value="Coconut water" required /></label>
+                      <label>B <input name="optionB" type="text" value="Almond milk" required /></label>
+                    </div>
+                    <div class="form-row">
+                      <label>C <input name="optionC" type="text" value="Apple juice" required /></label>
+                      <label>D <input name="optionD" type="text" value="Tap water" required /></label>
+                    </div>
+                    <label>Correct answer
+                      <select name="correctAnswer" required>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      </select>
+                    </label>
+                  </article>
+                </div>
+                <button class="button secondary add-question-button" id="addQuestionButton" type="button">Add another question</button>
+              </section>
+              <button class="button primary" type="submit">Save Module</button>
+              <p class="form-message" id="moduleSaveMessage" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page" data-page="assign" id="assign">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Manager Portal</p>
+            <a href="#manager" data-route="manager">Dashboard</a>
+            <a href="#manager-create" data-route="manager-create">Create Module</a>
+            <a class="active" href="#assign" data-route="assign">Assign Training</a>
+            <a href="#library" data-route="library">Library</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading">
+              <p class="eyebrow">Assign Training</p>
+              <h1>Assign Training</h1>
+            </div>
+            <form class="form-card">
+              <label>Choose module <select id="assignModuleSelect"><option>How to Make a Tropical Sunset Smoothie</option></select></label>
+              <label>Choose staff role <select><option>All staff</option><option>New staff</option></select></label>
+              <a class="button primary" href="#manager" data-route="manager">Assign</a>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="page portal-page" data-page="library" id="library">
+        <div class="portal-layout">
+          <aside class="portal-nav">
+            <p>Manager Portal</p>
+            <a href="#manager" data-route="manager">Dashboard</a>
+            <a href="#manager-create" data-route="manager-create">Create Module</a>
+            <a href="#assign" data-route="assign">Assign Training</a>
+            <a class="active" href="#library" data-route="library">Library</a>
+            <a href="#login" data-route="login">Logout</a>
+          </aside>
+          <div class="portal-main">
+            <div class="page-heading split">
+              <div>
+                <p class="eyebrow">Training Library</p>
+                <h1>Training Library</h1>
+              </div>
+              <a class="button primary" href="#manager-create" data-route="manager-create">Create Module</a>
+            </div>
+            <div class="module-grid" id="moduleGrid"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
