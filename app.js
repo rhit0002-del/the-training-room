@@ -1,9 +1,3 @@
-const defaultTrainingVideoSources = [
-  { src: "videos/tropical-sunset-smoothie.mp4", type: "video/mp4" },
-  { src: "videos/tropical-sunset-smoothie.mov" },
-  { src: "videos/tropical-sunset-smoothie.MOV" }
-];
-
 const defaultModule = {
   id: "smoothie-demo",
   title: "How to Make a Tropical Sunset Smoothie",
@@ -23,7 +17,8 @@ const defaultModule = {
       options: { A: "Coconut water", B: "Almond milk", C: "Apple juice", D: "Tap water" },
       correct: "A"
     }
-  ]
+  ],
+  video: null
 };
 
 const portalRoutes = [
@@ -51,7 +46,6 @@ const moduleTitle = document.querySelector("#moduleTitle");
 const moduleDescription = document.querySelector("#moduleDescription");
 const moduleCategory = document.querySelector("#moduleCategory");
 const moduleTime = document.querySelector("#moduleTime");
-const trainingVideoLink = document.querySelector("#trainingVideoLink");
 const moduleSteps = document.querySelector("#moduleSteps");
 const quizBuilder = document.querySelector("#quizBuilder");
 const addQuestionButton = document.querySelector("#addQuestionButton");
@@ -64,8 +58,14 @@ const scrollCue = document.querySelector(".scroll-cue");
 const homeHero = document.querySelector("#home-hero");
 const videoUploadInput = document.querySelector("#trainingVideoUpload");
 const videoFileName = document.querySelector("#videoFileName");
+const videoUploadStatus = document.querySelector("#videoUploadStatus");
 const videoUploadPreview = document.querySelector("#videoUploadPreview");
 const moduleVideoPreview = document.querySelector("#moduleVideoPreview");
+const moduleDetailTitle = document.querySelector("#moduleDetailTitle");
+const moduleDetailCategory = document.querySelector("#moduleDetailCategory");
+const moduleDetailTime = document.querySelector("#moduleDetailTime");
+const moduleDetailDescription = document.querySelector("#moduleDetailDescription");
+const moduleDetailSteps = document.querySelector("#moduleDetailSteps");
 const staffModuleStatus = document.querySelector("#staffModuleStatus");
 const staffModuleAction = document.querySelector("#staffModuleAction");
 const staffCompleteCount = document.querySelector("#staffCompleteCount");
@@ -83,7 +83,9 @@ const videoCompleteKey = "trainingRoomSmoothieVideoComplete";
 const moduleCompleteKey = "trainingRoomSmoothieModuleComplete";
 const demoEmail = "demo@trainingroom.com";
 const demoPassword = "trainingroom123";
-const maxStoredVideoBytes = 2.5 * 1024 * 1024;
+// Replace this placeholder with your Cloudinary cloud name. Never add an API secret here.
+const cloudinaryCloudName = "dgmh2tuhu";
+const cloudinaryUploadPreset = "training_room_uploads";
 const quizAnswers = {
   q1: "A",
   q2: "C",
@@ -93,9 +95,8 @@ const quizAnswers = {
 const quizTotal = Object.keys(quizAnswers).length;
 const memoryFlags = {};
 let savedModules = loadSavedModules();
-let pendingVideoFile = null;
-let uploadedTrainingVideoUrl = "";
-let uploadedTrainingVideoName = "";
+let activeModuleId = defaultModule.id;
+let uploadedCloudinaryVideo = null;
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -171,10 +172,15 @@ function renderModules() {
     .map((module) => {
       const statusClass = module.status === "Live" ? "status-complete" : "status-new";
       const quizCount = module.quiz?.length || 0;
-      const videoLabel = module.video?.link || module.video?.dataUrl ? "Video added" : module.video?.fileName ? "Video selected" : "No video yet";
+      const videoLabel = getVideoUrl(module) ? "Video uploaded" : "No video yet";
       const action = module.id === defaultModule.id
-        ? `<a class="button secondary" href="#staff-module" data-route="staff-module">View</a>`
-        : `<button class="button secondary module-edit-button" type="button" data-module-id="${module.id}">Edit</button>`;
+        ? `<button class="button secondary module-view-button" type="button" data-module-id="${module.id}">View</button>`
+        : `
+          <div class="module-card-actions">
+            <button class="button secondary module-view-button" type="button" data-module-id="${module.id}">View</button>
+            <button class="button secondary module-edit-button" type="button" data-module-id="${module.id}">Edit</button>
+          </div>
+        `;
 
       return `
         <article class="module-card">
@@ -195,6 +201,14 @@ function renderModules() {
 
   moduleGrid.querySelectorAll("[data-route]").forEach((link) => {
     link.addEventListener("click", handleRouteClick);
+  });
+
+  moduleGrid.querySelectorAll(".module-view-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeModuleId = button.dataset.moduleId || defaultModule.id;
+      renderModuleDetail(activeModuleId);
+      goToRoute("staff-module");
+    });
   });
 
   moduleGrid.querySelectorAll(".module-edit-button").forEach((button) => {
@@ -223,8 +237,8 @@ function renderEmptyVideoPreview(container, variant) {
   const title = variant === "module" ? "Training video" : "Video preview";
   const copy =
     variant === "module"
-      ? "Upload a training video in Create Module to preview it here."
-      : "Selected video will appear here before publishing.";
+      ? "Upload a training video in Create Module to display it here."
+      : "Your uploaded video will appear here before saving.";
 
   container.innerHTML = `
     <span class="play-button" aria-hidden="true"></span>
@@ -235,69 +249,22 @@ function renderEmptyVideoPreview(container, variant) {
   `;
 }
 
-function getEmbeddableVideoUrl(src) {
-  try {
-    const url = new URL(src);
-    const host = url.hostname.replace(/^www\./, "");
-
-    if (host === "youtu.be") {
-      const id = url.pathname.split("/").filter(Boolean)[0];
-      return id ? `https://www.youtube.com/embed/${id}` : "";
-    }
-
-    if (host === "youtube.com" || host === "m.youtube.com") {
-      const id = url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).at(-1);
-      return id ? `https://www.youtube.com/embed/${id}` : "";
-    }
-
-    if (host === "vimeo.com") {
-      const id = url.pathname.split("/").filter(Boolean)[0];
-      return id ? `https://player.vimeo.com/video/${id}` : "";
-    }
-
-    if (host === "player.vimeo.com") {
-      return src;
-    }
-  } catch {
-    return "";
+function renderVideoPlayer(container, src, name, heading = "") {
+  if (!src) {
+    renderEmptyVideoPreview(container, container === moduleVideoPreview ? "module" : "upload");
+    return;
   }
 
-  return "";
-}
+  const media = document.createElement("video");
+  media.className = "uploaded-video";
+  media.controls = true;
+  media.playsInline = true;
+  media.preload = "metadata";
+  media.src = src;
+  container.classList.remove("video-embed-card");
 
-function renderVideoPlayer(container, sources, name, heading = "") {
-  const videoSources = Array.isArray(sources) ? sources : [{ src: sources }];
-  const embedUrl = getEmbeddableVideoUrl(videoSources[0]?.src || "");
-  let media;
-
-  if (embedUrl) {
-    media = document.createElement("iframe");
-    media.className = "uploaded-video embedded-video";
-    media.src = embedUrl;
-    media.title = "Training video";
-    media.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    media.allowFullscreen = true;
-    container.classList.add("video-embed-card");
-  } else {
-    const video = document.createElement("video");
-    video.className = "uploaded-video";
-    video.controls = true;
-    video.playsInline = true;
-    video.preload = "metadata";
-
-    if (container === moduleVideoPreview) {
-      video.addEventListener("ended", markTrainingVideoComplete);
-    }
-
-    videoSources.forEach((sourceData) => {
-      const source = document.createElement("source");
-      source.src = sourceData.src;
-      if (sourceData.type) source.type = sourceData.type;
-      video.append(source);
-    });
-
-    media = video;
-    container.classList.remove("video-embed-card");
+  if (container === moduleVideoPreview) {
+    media.addEventListener("ended", markTrainingVideoComplete);
   }
 
   const children = [];
@@ -321,52 +288,40 @@ function renderVideoPlayer(container, sources, name, heading = "") {
   container.replaceChildren(...children);
 }
 
-function renderUploadedVideo(container) {
-  if (!container) return;
-
-  if (!uploadedTrainingVideoUrl) {
-    if (container === moduleVideoPreview) {
-      renderVideoPlayer(container, defaultTrainingVideoSources, "", "Training video");
-      return;
-    }
-
-    renderEmptyVideoPreview(container, container === moduleVideoPreview ? "module" : "upload");
-    return;
-  }
-
-  renderVideoPlayer(
-    container,
-    [{ src: uploadedTrainingVideoUrl }],
-    uploadedTrainingVideoName,
-    container === moduleVideoPreview ? "Training video" : ""
-  );
+function getVideoUrl(module) {
+  return module?.video?.url || module?.video?.secureUrl || "";
 }
 
-function isAcceptedVideo(file) {
-  const allowedTypes = ["video/mp4", "video/quicktime", "video/webm"];
-  const allowedExtensions = ["mp4", "mov", "webm"];
-  const extension = file.name.split(".").pop().toLowerCase();
-  return allowedTypes.includes(file.type) || allowedExtensions.includes(extension);
+function getModuleById(id) {
+  return getAllModules().find((module) => module.id === id) || defaultModule;
 }
 
-function updateTrainingVideo(file) {
-  if (!file) return;
+function renderModuleDetail(id = activeModuleId) {
+  const module = getModuleById(id);
+  activeModuleId = module.id;
 
-  if (!isAcceptedVideo(file)) {
-    videoFileName.textContent = "Please choose an MP4, MOV or WebM file.";
-    renderEmptyVideoPreview(videoUploadPreview, "upload");
-    return;
+  if (moduleDetailTitle) moduleDetailTitle.textContent = module.title;
+  if (moduleDetailCategory) moduleDetailCategory.textContent = module.category || "General";
+  if (moduleDetailTime) moduleDetailTime.textContent = module.time || "No time set";
+  if (moduleDetailDescription) moduleDetailDescription.textContent = module.description || "";
+
+  if (moduleDetailSteps) {
+    moduleDetailSteps.replaceChildren(
+      ...(module.steps?.length ? module.steps : defaultModule.steps).map((step) => {
+        const item = document.createElement("li");
+        item.textContent = step;
+        return item;
+      })
+    );
   }
 
-  if (uploadedTrainingVideoUrl) {
-    URL.revokeObjectURL(uploadedTrainingVideoUrl);
-  }
+  const videoUrl = getVideoUrl(module);
 
-  pendingVideoFile = file;
-  uploadedTrainingVideoUrl = URL.createObjectURL(file);
-  uploadedTrainingVideoName = file.name;
-  videoFileName.textContent = file.name;
-  renderUploadedVideo(videoUploadPreview);
+  if (videoUrl) {
+    renderVideoPlayer(moduleVideoPreview, videoUrl, "", "Training video");
+  } else {
+    renderEmptyVideoPreview(moduleVideoPreview, "module");
+  }
 }
 
 function markTrainingVideoComplete() {
@@ -451,44 +406,91 @@ function getQuizFromForm() {
     .filter((item) => item.question && item.options.A && item.options.B && item.options.C && item.options.D);
 }
 
-function readFileAsDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => resolve(reader.result));
-    reader.addEventListener("error", reject);
-    reader.readAsDataURL(file);
-  });
+function getVideoFromForm() {
+  return uploadedCloudinaryVideo;
 }
 
-async function getVideoFromForm() {
-  const link = trainingVideoLink.value.trim();
+function setVideoUploadStatus(message, type = "") {
+  if (!videoUploadStatus) return;
+  videoUploadStatus.textContent = message;
+  videoUploadStatus.className = `form-message ${type}`.trim();
+}
 
-  if (link) {
-    return { type: "link", link };
+function isCloudinaryConfigured() {
+  return Boolean(cloudinaryCloudName);
+}
+
+function isAcceptedVideoFile(file) {
+  if (!file) return false;
+
+  const acceptedTypes = new Set(["video/mp4", "video/quicktime", "video/webm"]);
+  const acceptedExtensions = [".mp4", ".mov", ".webm"];
+  const fileName = file.name.toLowerCase();
+
+  return acceptedTypes.has(file.type) || acceptedExtensions.some((extension) => fileName.endsWith(extension));
+}
+
+async function uploadVideoToCloudinary(file) {
+  if (!isCloudinaryConfigured()) {
+    throw new Error("Add your Cloudinary cloud name in app.js before uploading.");
   }
 
-  if (!pendingVideoFile) return null;
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", cloudinaryUploadPreset);
 
-  const video = {
-    type: "upload",
-    fileName: pendingVideoFile.name,
-    fileSize: pendingVideoFile.size
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/video/upload`, {
+    method: "POST",
+    body: formData
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error?.message || "Cloudinary upload failed.");
+  }
+
+  return {
+    type: "cloudinary",
+    url: result.secure_url,
+    secureUrl: result.secure_url,
+    publicId: result.public_id,
+    fileName: file.name,
+    resourceType: result.resource_type,
+    format: result.format
   };
+}
 
-  if (pendingVideoFile.size <= maxStoredVideoBytes) {
-    video.dataUrl = await readFileAsDataUrl(pendingVideoFile);
-  } else {
-    video.localOnly = true;
+async function handleVideoFileSelected(file) {
+  uploadedCloudinaryVideo = null;
+
+  if (!file) return;
+
+  if (!isAcceptedVideoFile(file)) {
+    videoFileName.textContent = "Please choose a video file.";
+    setVideoUploadStatus("Please choose a valid video file.", "error");
+    renderEmptyVideoPreview(videoUploadPreview, "upload");
+    return;
   }
 
-  return video;
+  videoFileName.textContent = file.name;
+  setVideoUploadStatus("Uploading video to Cloudinary...", "");
+  renderEmptyVideoPreview(videoUploadPreview, "upload");
+
+  try {
+    uploadedCloudinaryVideo = await uploadVideoToCloudinary(file);
+    setVideoUploadStatus("Video uploaded. You can now save the module.", "success");
+    renderVideoPlayer(videoUploadPreview, uploadedCloudinaryVideo.url, file.name, "");
+  } catch (error) {
+    setVideoUploadStatus(error.message, "error");
+  }
 }
 
 function makeModuleId() {
   return `module-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
-async function buildModuleFromForm() {
+function buildModuleFromForm() {
   return {
     id: moduleForm.dataset.editingId || makeModuleId(),
     title: moduleTitle.value.trim(),
@@ -498,7 +500,7 @@ async function buildModuleFromForm() {
     status: "Live",
     steps: getModuleStepsFromForm(),
     quiz: getQuizFromForm(),
-    video: await getVideoFromForm(),
+    video: getVideoFromForm(),
     updatedAt: new Date().toISOString()
   };
 }
@@ -545,19 +547,14 @@ function fillModuleForm(module) {
   moduleCategory.value = module.category || "";
   moduleTime.value = module.time || "";
   moduleSteps.value = (module.steps || []).join("\n");
-  trainingVideoLink.value = module.video?.link || "";
-  pendingVideoFile = null;
+  uploadedCloudinaryVideo = module.video || null;
+  videoFileName.textContent = module.video?.fileName || "No video selected.";
+  setVideoUploadStatus(module.video ? "Existing uploaded video loaded." : "", module.video ? "success" : "");
 
-  if (uploadedTrainingVideoUrl) {
-    URL.revokeObjectURL(uploadedTrainingVideoUrl);
-    uploadedTrainingVideoUrl = "";
-    uploadedTrainingVideoName = "";
-  }
+  const videoUrl = getVideoUrl(module);
 
-  videoFileName.textContent = module.video?.fileName ? module.video.fileName : "No video selected.";
-
-  if (module.video?.dataUrl || module.video?.link) {
-    renderVideoPlayer(videoUploadPreview, [{ src: module.video.dataUrl || module.video.link }], module.video.fileName || "", "");
+  if (videoUrl) {
+    renderVideoPlayer(videoUploadPreview, videoUrl, module.video?.fileName || "Uploaded video", "");
   } else {
     renderEmptyVideoPreview(videoUploadPreview, "upload");
   }
@@ -574,17 +571,11 @@ function resetModuleForm() {
   moduleDescription.value = defaultModule.description;
   moduleCategory.value = defaultModule.category;
   moduleTime.value = defaultModule.time;
-  trainingVideoLink.value = "";
   moduleSteps.value = defaultModule.steps.join("\n");
-  pendingVideoFile = null;
-  videoFileName.textContent = "No video selected.";
   moduleSaveMessage.textContent = "";
-
-  if (uploadedTrainingVideoUrl) {
-    URL.revokeObjectURL(uploadedTrainingVideoUrl);
-    uploadedTrainingVideoUrl = "";
-    uploadedTrainingVideoName = "";
-  }
+  uploadedCloudinaryVideo = null;
+  videoFileName.textContent = "No video selected.";
+  setVideoUploadStatus("", "");
 
   renderEmptyVideoPreview(videoUploadPreview, "upload");
   quizBuilder.replaceChildren(createQuizBuilderItem(defaultModule.quiz[0]));
@@ -647,7 +638,7 @@ addQuestionButton?.addEventListener("click", () => {
   quizBuilder.append(createQuizBuilderItem());
 });
 
-moduleForm?.addEventListener("submit", async (event) => {
+moduleForm?.addEventListener("submit", (event) => {
   event.preventDefault();
 
   if (!moduleForm.checkValidity()) {
@@ -658,7 +649,13 @@ moduleForm?.addEventListener("submit", async (event) => {
   moduleSaveMessage.textContent = "Saving module...";
   moduleSaveMessage.className = "form-message";
 
-  const module = await buildModuleFromForm();
+  if (!uploadedCloudinaryVideo?.url) {
+    moduleSaveMessage.textContent = "Please upload a training video before saving.";
+    moduleSaveMessage.className = "form-message error";
+    return;
+  }
+
+  const module = buildModuleFromForm();
   const editingIndex = savedModules.findIndex((item) => item.id === module.id);
 
   if (editingIndex >= 0) {
@@ -672,30 +669,9 @@ moduleForm?.addEventListener("submit", async (event) => {
     moduleSaveMessage.textContent = "Module saved to Training Library.";
     moduleSaveMessage.className = "form-message success";
   } catch {
-    if (module.video?.dataUrl) {
-      delete module.video.dataUrl;
-      module.video.localOnly = true;
-
-      if (editingIndex >= 0) {
-        savedModules[editingIndex] = module;
-      } else {
-        savedModules[0] = module;
-      }
-
-      try {
-        saveSavedModules();
-        moduleSaveMessage.textContent = "Module saved. The video file was too large for browser storage, so use a video link for a refresh-safe demo.";
-        moduleSaveMessage.className = "form-message error";
-      } catch {
-        moduleSaveMessage.textContent = "The browser could not save this module. Try using a video link instead of a file upload.";
-        moduleSaveMessage.className = "form-message error";
-        return;
-      }
-    } else {
-      moduleSaveMessage.textContent = "The browser could not save this module. Try shortening the content or using a video link.";
-      moduleSaveMessage.className = "form-message error";
-      return;
-    }
+    moduleSaveMessage.textContent = "The browser could not save this module. Try shortening the content.";
+    moduleSaveMessage.className = "form-message error";
+    return;
   }
 
   renderModules();
@@ -732,34 +708,14 @@ quizForm?.addEventListener("submit", (event) => {
 });
 
 videoUploadInput?.addEventListener("change", (event) => {
-  updateTrainingVideo(event.target.files[0]);
-});
-
-trainingVideoLink?.addEventListener("input", () => {
-  const link = trainingVideoLink.value.trim();
-
-  if (link) {
-    pendingVideoFile = null;
-    videoFileName.textContent = "Using video link.";
-    renderVideoPlayer(videoUploadPreview, [{ src: link }], "Video link preview", "");
-    return;
-  }
-
-  videoFileName.textContent = "No video selected.";
-  renderEmptyVideoPreview(videoUploadPreview, "upload");
+  handleVideoFileSelected(event.target.files[0]);
 });
 
 tryAgainButton?.addEventListener("click", resetQuiz);
 
-window.addEventListener("beforeunload", () => {
-  if (uploadedTrainingVideoUrl) {
-    URL.revokeObjectURL(uploadedTrainingVideoUrl);
-  }
-});
-
 renderModules();
 renderAssignModuleOptions();
-renderUploadedVideo(moduleVideoPreview);
+renderModuleDetail(activeModuleId);
 syncQuizGate();
 syncStaffDashboard();
 routeTo(readRoute());
