@@ -18,7 +18,15 @@ const defaultModule = {
       correct: "A"
     }
   ],
-  video: null
+  video: {
+    type: "cloudinary",
+    url: "https://res.cloudinary.com/dgmh2tuhu/video/upload/v1778725474/tropical_smoothie_demo_small.mp4_s2xnrr.mov",
+    secureUrl: "https://res.cloudinary.com/dgmh2tuhu/video/upload/v1778725474/tropical_smoothie_demo_small.mp4_s2xnrr.mov",
+    publicId: "tropical_smoothie_demo_small.mp4_s2xnrr",
+    fileName: "tropical_smoothie_demo_small.mov",
+    resourceType: "video",
+    format: "mov"
+  }
 };
 
 const portalRoutes = [
